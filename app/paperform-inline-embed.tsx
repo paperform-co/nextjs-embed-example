@@ -1,12 +1,16 @@
 "use client";
 
-import usePaperformEmbed from "./use-paperform-embed";
+import usePaperformEmbed, {
+  UsePaperformEmbedOptions,
+} from "./use-paperform-embed";
 
-export default function PaperformInlineEmbed({ slug }: { slug: string }) {
-  const { props } = usePaperformEmbed({
-    slug,
+export default function PaperformInlineEmbed(
+  props: Omit<UsePaperformEmbedOptions, "type">
+) {
+  const { props: embedProps } = usePaperformEmbed({
+    ...props,
     type: "inline",
   });
 
-  return <div {...props} className="w-full" />;
+  return <div {...embedProps} className="w-full" />;
 }

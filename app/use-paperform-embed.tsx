@@ -4,9 +4,12 @@ import { useEffect } from "react";
 
 type EmbedType = "inline" | "popup" | "takeover";
 
-interface UsePaperformEmbedOptions {
+export interface UsePaperformEmbedOptions {
   slug: string;
   type: EmbedType;
+  // Must be provided if you are not in the default Paperform region
+  // e.g. "au.paperform.co"
+  paperformDomain?: string;
 }
 
 export interface UsePaperformEmbedReturn {
@@ -16,7 +19,7 @@ export interface UsePaperformEmbedReturn {
 export default function usePaperformEmbed(
   options: UsePaperformEmbedOptions
 ): UsePaperformEmbedReturn {
-  const { slug } = options;
+  const { slug, paperformDomain } = options;
 
   useEffect(() => {
     const src = "https://paperform.co/__embed.min.js";
@@ -29,9 +32,13 @@ export default function usePaperformEmbed(
     }
   }, []);
 
-  const props = {
+  const props: UsePaperformEmbedReturn["props"] = {
     ["data-paperform-id"]: slug,
   };
+
+  if (paperformDomain) {
+    props["data-url"] = `https://${slug}.${paperformDomain}`;
+  }
 
   if (options.type === "popup") {
     return {
